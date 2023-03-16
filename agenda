@@ -1,0 +1,12 @@
+1. cara dry run buat generate yaml
+2. kubectl explain <nama_object>
+
+configmap
+1. 
+
+secret:
+cara penulisan:
+1. convert plain text ke base64
+echo -n "string" | base64
+2. convert base64 enc ke plain text
+echo -n "base64 enc" | base64 -d

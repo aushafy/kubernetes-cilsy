@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: sosmed-configmap
+  labels:
+    app: sosmed
+data:
+  # contoh Key Value pair
+  DB_HOST: dbpause.cyvxmusxt9s8.ap-southeast-2.rds.amazonaws.com
+  DB_USER: admin
+  # DB_PASS: see secrets.yaml
+  DB_NAME: mysqlpaus
+
+  # contoh configmap multilines
+  config.php: |
+    <?php
+
+    $redis_host = "localhost";
+    $redis_user = "redis-user";
+    $redis_pass = "1234567890";
+    $redis_port = "8080";
+
+    try {    
+        //create PDO connection 
+        $db = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
+    } catch(PDOException $e) {
+        //show error
+        die("Terjadi masalah: " . $e->getMessage());
+    }
