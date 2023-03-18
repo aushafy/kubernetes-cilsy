@@ -6,10 +6,10 @@ metadata:
     app: sosmed
 data:
   # contoh Key Value pair
-  DB_HOST: dbpause.cyvxmusxt9s8.ap-southeast-2.rds.amazonaws.com
+  DB_HOST: mysql.default.svc.cluster.local
   DB_USER: admin
   # DB_PASS: see secrets.yaml
-  DB_NAME: mysqlpaus
+  DB_NAME: sosmed
 
   # contoh configmap multilines
   config.php: |

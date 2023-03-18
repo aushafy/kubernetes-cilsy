@@ -10,3 +10,39 @@ cara penulisan:
 echo -n "string" | base64
 2. convert base64 enc ke plain text
 echo -n "base64 enc" | base64 -d
+
+Enable CSI AWS EBS on AWS EKS
+reference: 
+1. tambah IAM Identity Provider dari OIDC EKS
+2. tambah IAM Role untuk EKS EBS CSI => AmazonEKS_EBS_CSI_DriverRole
+3. attach policy AmazonEBSCSIDriverPolicy ke IAM Role AmazonEKS_EBS_CSI_DriverRole
+4. add trust relationship 
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Federated": "arn:aws:iam::898130718046:oidc-provider/oidc.eks.ap-southeast-1.amazonaws.com/id/D35FF9400A78D2C2E7552A6652F18353"
+            },
+            "Action": "sts:AssumeRoleWithWebIdentity",
+            "Condition": {
+                "StringEquals": {
+                    "oidc.eks.ap-southeast-1.amazonaws.com/id/D35FF9400A78D2C2E7552A6652F18353:aud": "sts.amazonaws.com",
+                    "oidc.eks.ap-southeast-1.amazonaws.com/id/D35FF9400A78D2C2E7552A6652F18353:sub": "system:serviceaccount:kube-system:ebs-csi-controller-sa"
+                }
+            }
+        }
+    ]
+}
+4. setup csi driver addons -> pakai IAM Role AmazonEKS_EBS_CSI_DriverRole
+5. annotate service account
+kubectl annotate serviceaccount ebs-csi-controller-sa \
+  -n kube-system \
+  eks.amazonaws.com/role-arn=arn:aws:iam::898130718046:role/AmazonEC2ContainerRegistryReadOnly
+6. restart pods
+kubectl delete pods \
+  -n kube-system \
+  -l=app=ebs-csi-controller
+
+

@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mysql-restore-sosmed
+spec:
+  template:
+    spec:
+      containers:
+      - name: mysql-restore-sosmed
+        image: ubuntu
+        command:
+          - apt update -y && apt install mysql-client
+          - git clone https://github.com/sdcilsy/sosial-media.git
+          - mysql -h mysql.default.svc.cluster.local -u admin -p P@ssw0rd -D sosmed < sosial-media/dump.sql
+      restartPolicy: Never
+  backoffLimit: 4
